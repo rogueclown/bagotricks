@@ -20,7 +20,7 @@ parser.add_option('-i', '--inputfile', dest='infile', help='list of URLs.  one p
 
 if not opts.infile:
 	print 'input file option (-i) is mandatory.  use -h switch for help.'
-	sys.exit(1)
+	exit(1)
 
 try:
 	f = open(opts.infile)
@@ -28,7 +28,7 @@ try:
 	f.close()
 except:
 	print 'error reading ' + opts.infile
-	sys.exit(1)
+	exit(1)
 
 urls = [url.rstrip() for url in urls]
 
@@ -42,7 +42,7 @@ for url in urls:
 	print "=" * 60 + '\n'
 	print url + '\n'
 	try:
-		rawheaders = subprocess.check_output(['curl', '--insecure', '-s', '-I', url])
+		rawheaders = subprocess.check_output(['curl', '--insecure', '--max-time', '5', '--connect-timeout', '0', '-s', '-I', url])
 		headers = rawheaders.split('\n')
 		if "x-frame-options" not in rawheaders.lower():
 			print 'x-frame-options header not present; site may be vulnerable to clickjacking.'
