@@ -96,7 +96,7 @@ if sort == 'vuln':
 		print url
 	print '=' * 60
 	print '\n'
-	print 'HSTS neader not present:\n'
+	print 'HSTS header not present:\n'
 	for url in hstsabsent:
 		print url
 	print '=' * 60
