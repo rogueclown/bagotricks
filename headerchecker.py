@@ -42,6 +42,7 @@ if sort == 'vuln':
 	nosecure = []
 	nohttponly = []
 	noheaders = []
+	csp = []
 
 urls = [url.rstrip() for url in urls]
 
@@ -58,6 +59,11 @@ for url in urls:
 	try:
 		rawheaders = subprocess.check_output(['curl', '--insecure', '--max-time', '5', '--connect-timeout', '0', '-s', '-I', url])
 		headers = rawheaders.split('\n')
+		if "x-content-security-policy" not in rawheaders.lower():
+			if sort == 'vuln':
+				csp.append(url)
+			else
+				print 'x-content-security-policy header not present.'
 		if "x-frame-options" not in rawheaders.lower():
 			if sort == 'vuln':
 				clickjack.append(url)
@@ -98,6 +104,11 @@ if sort == 'vuln':
 	print '\n'
 	print 'HSTS header not present:\n'
 	for url in hstsabsent:
+		print url
+	print '=' * 60
+	print '\n'
+	print 'content security policy header not present.\n'
+	for url in csp:
 		print url
 	print '=' * 60
 	print '\n'
